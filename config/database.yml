@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: rich_dev
+  username: rich_user
+  password: 
+  host: localhost
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: rich_test
+  username: rich_user
+  password: 
+  host: localhost
+production:
+  pool: 16
+  timeout: 10000

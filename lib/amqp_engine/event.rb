@@ -1,5 +1,5 @@
-require 'amqp_engine/models/direct_offer_show'
-require 'amqp_engine/models/direct_offer_redirect'
+#require 'amqp_engine/models/direct_offer_show'
+#require 'amqp_engine/models/direct_offer_redirect'
 class Event
 
   LIST = %w( direct_offer_redirect direct_offer_show )
@@ -12,15 +12,11 @@ class Event
       @mongo_db = @message[ 'event' ]
     end
     @congruence_word = @mongo_db ? ( LIST & [ @mongo_db ] ).first : nil
-    @congruence = @fact ? congruence_class.new( adapt ) : nil
+#    @congruence = @fact ? congruence_class.new( adapt ) : nil
   end
 
   def pull_data( event_json )
-    begin
-      JSON.parse( event_json )
-    rescue
-      nil
-    end
+    JSON.parse( event_json )
   end
 
   def congruence_class

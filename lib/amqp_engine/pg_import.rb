@@ -10,8 +10,12 @@ class PgImport
 
     env = ENV['RACK_ENV'] || 'development'
 
-    configuration = YAML::load(IO.read('config/database.yml'))
-    ActiveRecord::Base.establish_connection( configuration[ env ] )
+    if env == 'production'
+      ActiveRecord::Base.establish_connection( ENV[ DATABASE_URL ] )
+    else
+      configuration = YAML::load(IO.read('config/database.yml'))
+      ActiveRecord::Base.establish_connection( configuration[ env ] )
+    end
 
     mongo_url = mongohq_url = ENV['MONGOHQ_URL'] || '127.0.0.1:27017'
     mongo_client = Moped::Session.connect(  mongohq_url )

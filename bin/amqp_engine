@@ -10,6 +10,7 @@ require 'statsd-ruby'
 require 'moped'
 require 'active_record'
 require 'activerecord-import'
+require 'uri'
 
 require 'amqp_engine/event'
 require 'amqp_engine/direct_offer'

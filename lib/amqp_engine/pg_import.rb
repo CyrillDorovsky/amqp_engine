@@ -14,7 +14,7 @@ class PgImport
     ActiveRecord::Base.establish_connection( configuration[ env ] )
 
     mongo_url = mongohq_url = ENV['MONGOHQ_URL'] || '127.0.0.1:27017'
-    mongo_client = Moped::Session.new( [ mongohq_url ] )
+    mongo_client = Moped::Session.connect(  mongohq_url )
     mongo_client.use( 'api_events' )
 
     collections = collections_for( msg )

@@ -13,5 +13,5 @@ test:
   password: 
   host: localhost
 production:
-  pool: 16
+  pool: <%= ENV['CONNECTION_POOL'] %>
   timeout: 10000

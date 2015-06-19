@@ -18,7 +18,6 @@ require 'amqp_engine/pg_import'
 require 'amqp_engine/models/direct_offer_show'
 require 'amqp_engine/models/direct_offer_redirect'
 
-configuration = YAML::load(IO.read('config/database.yml'))
 statsd = Statsd.new(ENV['STATSD_HOST'], 9125)
 amqp_url = ENV['CLOUDAMQP_URL'] || ('amqp://guest:guest@localhost:5672')
 Sneakers.configure( :amqp => amqp_url, :daemonize => false, :log => STDOUT, :metrics => Sneakers::Metrics::StatsdMetrics.new(statsd), workers: 1 )

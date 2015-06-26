@@ -3,7 +3,8 @@ require 'amqp_engine/version'
 
 class PgImport
   include Sneakers::Worker
-  from_queue 'regular_tasks'
+  from_queue 'regular_tasks',
+    prefetch: 1
 
   def work( msg )
     start = Time.new

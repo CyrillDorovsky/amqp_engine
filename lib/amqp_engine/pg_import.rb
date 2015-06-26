@@ -29,7 +29,7 @@ class PgImport
         clean_params.delete( '_id' )
         params[ :klass ].new clean_params
       end
-    #  params[ :klass ].import items
+      params[ :klass ].import items
 
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],
                                                                  [ { '$group' => {'_id' => '$from', 'summa' => { '$sum' => 1 } } } ] ])
@@ -38,7 +38,7 @@ class PgImport
         amount = event['summa']
         DealerStat.trigger( collection, dealer: params[ :dealer_id ], offer: params[ :offer_id ], amount: amount )
       end
-#      mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i } ).remove_all
+      mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i } ).remove_all
     end
 
     ack!

@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.2.1'
+
 
 gem 'statsd-ruby'    # using statsd with Sneakers::Metrics
 gem 'foreman'        # for an easy deployment story with Upstart

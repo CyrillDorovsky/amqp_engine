@@ -3,6 +3,7 @@ require 'bundler/setup'
 root = File.expand_path('../lib',File.dirname(__FILE__))
 $: << root
 require 'sneakers'
+require 'hashids'
 require 'sneakers/runner'
 require 'sneakers/metrics/statsd_metrics'
 require 'logger'
@@ -10,6 +11,7 @@ require 'statsd-ruby'
 require 'moped'
 require 'active_record'
 require 'activerecord-import'
+require 'active_support/time'
 require 'uri'
 
 require 'amqp_engine/event'
@@ -17,10 +19,12 @@ require 'amqp_engine/direct_offer'
 require 'amqp_engine/pg_import'
 require 'amqp_engine/models/direct_offer_show'
 require 'amqp_engine/models/direct_offer_redirect'
+require 'amqp_engine/models/redirect_code'
+require 'amqp_engine/models/dealer_stat'
 
 statsd = Statsd.new(ENV['STATSD_HOST'], 9125)
 amqp_url = ENV['CLOUDAMQP_URL'] || ('amqp://guest:guest@localhost:5672')
-Sneakers.configure( :amqp => amqp_url, :daemonize => false, :log => STDOUT, :metrics => Sneakers::Metrics::StatsdMetrics.new(statsd), workers: 1 )
+Sneakers.configure( :amqp => amqp_url, :daemonize => false, :log => STDOUT, :metrics => Sneakers::Metrics::StatsdMetrics.new(statsd), workers: 1, threads: 10 )
 Sneakers.logger.level = Logger::INFO
 
 r = Sneakers::Runner.new([ DirectOffer, PgImport ])

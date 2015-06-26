@@ -9,6 +9,8 @@ gem 'pg'
 gem 'activerecord'
 gem 'activerecord-import'
 gem 'sneakers'
+gem 'hashids'
+gem 'activesupport'
 
 group :test, :development do
   gem 'minitest'

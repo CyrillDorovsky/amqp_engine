@@ -1,7 +1,6 @@
 class DealerStat < ActiveRecord::Base
 
   belongs_to :dealer
-  belongs_to :campaign
 
   scope :hourly,  -> { where( hourly:  true ) }
   scope :daily,   -> { where( daily:   true ) }
@@ -13,7 +12,6 @@ class DealerStat < ActiveRecord::Base
   scope :cpa,         -> { where( cpa:  true ) }
 
   scope :no_grouping,       -> { where( no_grouping: true ) }
-  scope :campaign_grouping, -> { where( campaign_grouping: true ) }
   scope :offer_grouping,    -> { where( offer_grouping: true ) }
 
   scope :triggered_at_asc, -> { order( 'triggered_at ASC' ) }
@@ -27,10 +25,8 @@ class DealerStat < ActiveRecord::Base
   scope :last_month,      -> { where( created_at: 1.month.ago..Time.zone.now ) }
 
   validates :md5id, presence: true, uniqueness: true
-  #after_create :check_hour, if: Proc.new { hourly == true }
 
 
-  WAPCLICK_EVENTS    = %i( subscribe unsubscribe rebill buyout )
   APPS_ADVERT_EVENTS = %i( app_install )
   COMMON_EVENTS      = %i( visitor uniq_visitor uniq_traf_back traf_back )
 
@@ -55,56 +51,6 @@ class DealerStat < ActiveRecord::Base
   def hour_is_invalid
     created_hour = created_at.hour
     current != created_hour or hour != created_hour
-  end
-
-  def self.clean_dubles
-    where( created_at: 2.hours.ago..Time.now ).map do | st |
-      begin
-        md5id = st.set_md5
-        st.save!
-      rescue
-        st.check_for_doubles
-      end
-    end
-  end
-
-  def check_for_doubles
-    md5id = set_md5
-    if valid?
-      save!
-    else
-      original_stat = DealerStat.find_by( md5id: md5id )
-      original_stat.visitor              += visitor
-      original_stat.uniq_visitor         += uniq_visitor
-      original_stat.traf_back            += traf_back
-      original_stat.money_total          += money_total
-      original_stat.money_waiting        += money_waiting
-      original_stat.money_confirmed      += money_confirmed
-      original_stat.money_declined       += money_declined
-      original_stat.download             += download
-      original_stat.uniq_traf_back       += uniq_traf_back
-      original_stat.subscribe            += subscribe
-      original_stat.rebill               += rebill
-      original_stat.unsubscribe          += unsubscribe
-      original_stat.conversion_total     += conversion_total
-      original_stat.conversion_confirmed += conversion_confirmed
-      original_stat.conversion_waiting   += conversion_waiting
-      original_stat.conversion_declined  += conversion_declined
-      original_stat.conversion_subscribe += conversion_subscribe
-      original_stat.conversion_rebill    += conversion_rebill
-      original_stat.money_from_rebill    += money_from_rebill
-      original_stat.money_from_buyout    += money_from_buyout
-      original_stat.conversion_buyout    += conversion_buyout
-      original_stat.conversion_install   += conversion_install
-      original_stat.js_visitor           += js_visitor
-      original_stat.uniq_js_visitor      += uniq_js_visitor
-      original_stat.webland_visitor      += webland_visitor
-      original_stat.uniq_webland_visitor += uniq_webland_visitor
-      original_stat.conversion_app_install += conversion_app_install
-      original_stat.conversion_unsubscribe += conversion_unsubscribe
-      original_stat.save!
-      self.delete
-    end
   end
 
   def self.trigger( fact, context = {} )
@@ -159,6 +105,10 @@ class DealerStat < ActiveRecord::Base
 
   def self.increments_for( fact, context = {} )
     case fact
+    when :direct_offer_show
+      { uniq_visitor: context[ :amount ] }
+    when :direct_offer_redirect
+      { uniq_js_visitor: context[ :amount ] }
     when :visitor
       { visitor: context[ :amount ] ? context[ :amount ] : 1 }
     when :uniq_visitor
@@ -199,18 +149,18 @@ class DealerStat < ActiveRecord::Base
 
   def self.dealer_revenue( context = {} )
     if context[ :amount ]
-      context[ :campaign ].dealer.dealer_revenue( context[ :offer ] ) * context[ :amount ]
+      context[ :dealer ].dealer_revenue( context[ :offer ] ) * context[ :amount ]
     else
-      context[ :campaign ].dealer.dealer_revenue( context[ :offer ] )
+      context[ :dealer ].dealer_revenue( context[ :offer ] )
     end
   end
 
   def self.search_for( fact, context = {} )
     basis = {}
-    basis[ :dealer_id ]   = context[ :campaign ].dealer_id
+    basis[ :dealer_id ]   = context[ :dealer ]
     basis[ :purpose ]     = 'apps_advert'
-    basis[ :offer_id ]    = context[ :offer ] ? context[ :offer ].id : nil
-    basis[ :campaign_id ] = context[ :campaign ].id
+    basis[ :offer_id ]    = context[ :offer ] 
+    basis[ :campaign_id ] = context[ :campaign ] ? context[ :campaign ].id : nil
     basis[ 'apps_advert' ] = true
     if context[ :current ] 
       basis[ :current_timestamp ] = context[ :current ] 
@@ -255,7 +205,7 @@ class DealerStat < ActiveRecord::Base
 
   def self.add_current_time( regularity, basis )
     result = {}
-    current_time = basis[ :current_timestamp ] ? Time.zone.at( basis[ :current_timestamp] ) : Time.zone.now
+    current_time = basis[ :current_timestamp ] ? Time.zone.at( basis[ :current_timestamp] ) : Time.find_zone!('Moscow').now
     result[ regularity ] = true
     case regularity
     when :hourly
@@ -433,8 +383,6 @@ class DealerStat < ActiveRecord::Base
   def grouping_name
     if attributes.keys.include? 'offer_id'
       name = Offer.find( offer_id ).name if offer_id
-    elsif attributes.keys.include? 'campaign_id'
-      name = Campaign.find( campaign_id ).name if campaign_id
     end
   end
 

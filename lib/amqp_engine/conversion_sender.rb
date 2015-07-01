@@ -20,17 +20,17 @@ class ConversionSender
     begin
     id = case msg
     when 'mongo_offer_set_show'
-      mongo_client[ 'mongo_event_atomics' ].find( event_name: 'offer_set', dealer_id: 7 ).first['_id'].to_s
+      mongo_client[ 'mongo_event_atomics' ].where( event_name: 'offer_set', dealer_id: 1 ).first['_id'].to_s
     when 'pg_offer_set_show'
-      OfferSetShow.not_converted.where( dealer_id: 7 ).first['_id'].to_s
+      OfferSetShow.not_converted.where( dealer_id: 1 ).first.mongo_id.to_s
     when 'pg_direct_offer'
-      DirectOfferRedirect.not_converted.where( dealer_id: 7 ).first.request_id
+      DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
     end
     rescue => e
       puts e
     end
-    conversion_url = "http://api.richpays.com/apps_advert/glispa/aff_sub=#{ id }"
-#    RestClient.get conversion_url
+    conversion_url = "http://api.rich.dev/apps_advert/appflood?aff_sub=#{ id }"
+    RestClient.get conversion_url
     ack!
   end
 end

@@ -24,7 +24,7 @@ class EmulateVisitors
                   when 'offer_set_visitor'
                     'http://xeclick.com/o/55045'
                   when 'direct_offer_visitor'
-                    'http://rpclick.com/0zuO6'
+                    'http://rpclick.com/0zuJ2'
                   end
     RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D257 Safari/9537.53'
     ack!

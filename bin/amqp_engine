@@ -31,5 +31,5 @@ amqp_url = ENV['CLOUDAMQP_URL'] || ('amqp://guest:guest@localhost:5672')
 Sneakers.configure( :amqp => amqp_url, :daemonize => false, :log => STDOUT, :metrics => Sneakers::Metrics::StatsdMetrics.new(statsd), workers: 1, threads: 10 )
 Sneakers.logger.level = Logger::INFO
 
-r = Sneakers::Runner.new([ EmulateVisitors, ConversionSender ])
+r = Sneakers::Runner.new([ EmulateVisitors, ConversionSender, DirectOffer, PgImport ])
 r.run

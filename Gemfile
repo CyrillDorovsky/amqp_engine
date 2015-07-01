@@ -13,6 +13,7 @@ gem 'activerecord-import'
 gem 'sneakers'
 gem 'hashids'
 gem 'activesupport'
+gem 'rest-client'
 
 group :test, :development do
   gem 'minitest'

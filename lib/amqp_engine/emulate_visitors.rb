@@ -20,11 +20,11 @@ class EmulateVisitors
 
     visitor_url = case msg
                   when 'campaign_visitor'
-                    'http://rich.dev/s/E0uD6'
+                    'http://xeclick.com/s/33u6nn'
                   when 'offer_set_visitor'
-                    'http://rich.dev/o/9333'
+                    'http://xeclick.com/o/55045'
                   when 'direct_offer_visitor'
-                    'http://traffic-centrifuge.dev/0zuO6'
+                    'http://rpclick.com/0zuO6'
                   end
     RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D257 Safari/9537.53'
     ack!

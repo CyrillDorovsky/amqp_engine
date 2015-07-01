@@ -29,7 +29,7 @@ class ConversionSender
     rescue => e
       puts e
     end
-    conversion_url = "http://api.rich.dev/apps_advert/glispa?placement=#{ id }"
+    conversion_url = "http://api.richpays.com/apps_advert/glispa?placement=#{ id }"
     RestClient.get conversion_url
     ack!
   end

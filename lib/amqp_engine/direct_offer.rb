@@ -1,7 +1,10 @@
 require "amqp_engine/version"
+require 'new_relic/agent/method_tracer'
 
 class DirectOffer
   include Sneakers::Worker
+  include ::NewRelic::Agent::MethodTracer
+
   from_queue 'api_events'
 
   def work( msg )
@@ -14,4 +17,6 @@ class DirectOffer
     end
     ack!
   end
+
+  add_method_tracer :work, 'Custom/direct_offer'
 end

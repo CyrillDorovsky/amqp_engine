@@ -1,8 +1,10 @@
 require 'amqp_engine/version'
-
+require 'new_relic/agent/method_tracer'
 
 class PgImport
   include Sneakers::Worker
+  include ::NewRelic::Agent::MethodTracer
+
   from_queue 'regular_tasks',
     prefetch: 1
 
@@ -63,4 +65,5 @@ class PgImport
     Object.const_get( "DirectOffer#{ @congruence_word }" )
   end
 
+  add_method_tracer :work, 'Custom/pg_import'
 end

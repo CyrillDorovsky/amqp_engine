@@ -1,6 +1,9 @@
 #require 'amqp_engine/models/direct_offer_show'
 #require 'amqp_engine/models/direct_offer_redirect'
+require 'new_relic/agent/method_tracer'
+
 class Event
+  include ::NewRelic::Agent::MethodTracer
 
   LIST = %w( direct_offer_redirect direct_offer_show )
 

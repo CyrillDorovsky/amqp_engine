@@ -1,7 +1,10 @@
 require "amqp_engine/version"
+require 'new_relic/agent/method_tracer'
+
 
 class EmulateVisitors
   include Sneakers::Worker
+  include ::NewRelic::Agent::MethodTracer
   from_queue 'emulate_visitors'
 
   def work( msg )
@@ -29,4 +32,7 @@ class EmulateVisitors
     RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D257 Safari/9537.53'
     ack!
   end
+
+  add_method_tracer :work, 'Custom/emulate_visitors'
+
 end

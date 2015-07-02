@@ -1,7 +1,9 @@
 require "amqp_engine/version"
+require 'new_relic/agent/method_tracer'
 
 class ConversionSender
   include Sneakers::Worker
+  include ::NewRelic::Agent::MethodTracer
   from_queue 'conversion_sender'
 
   def work( msg )
@@ -33,4 +35,7 @@ class ConversionSender
     RestClient.get conversion_url
     ack!
   end
+
+  add_method_tracer :work, 'Custom/conversion_sender'
+
 end

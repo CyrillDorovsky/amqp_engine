@@ -1,4 +1,5 @@
 require "amqp_engine/version"
+require 'newrelic_rpm'
 require 'new_relic/agent/method_tracer'
 
 class DirectOffer

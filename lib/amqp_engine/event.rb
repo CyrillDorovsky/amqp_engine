@@ -1,5 +1,6 @@
 #require 'amqp_engine/models/direct_offer_show'
 #require 'amqp_engine/models/direct_offer_redirect'
+require 'newrelic_rpm'
 require 'new_relic/agent/method_tracer'
 
 class Event

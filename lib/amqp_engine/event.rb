@@ -4,6 +4,7 @@ require 'newrelic_rpm'
 require 'new_relic/agent/method_tracer'
 
 class Event
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include ::NewRelic::Agent::MethodTracer
 
   LIST = %w( direct_offer_redirect direct_offer_show )
@@ -84,5 +85,8 @@ class Event
       }
     end
   end
+
+  add_transaction_tracer :initialize, :category => :task
+  add_method_tracer :initialize, 'Custom/event'
 
 end

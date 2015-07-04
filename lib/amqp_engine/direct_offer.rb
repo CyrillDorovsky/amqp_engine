@@ -4,6 +4,7 @@ require 'new_relic/agent/method_tracer'
 
 class DirectOffer
   include Sneakers::Worker
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include ::NewRelic::Agent::MethodTracer
 
   from_queue 'api_events'
@@ -20,5 +21,6 @@ class DirectOffer
     ack!
   end
 
+  add_transaction_tracer :work, :category => :task
   add_method_tracer :work, 'Custom/direct_offer'
 end

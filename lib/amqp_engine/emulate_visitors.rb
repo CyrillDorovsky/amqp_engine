@@ -27,11 +27,11 @@ class EmulateVisitors
                   when 'campaign_visitor'
                     'http://xeclick.com/s/33u6nn'
                   when 'offer_set_visitor'
-                    'http://xeclick.com/o/55045'
+                    'http://target.xeclick.com/o/55332'
                   when 'direct_offer_visitor'
-                    'http://rpclick.com/0zuJ2'
+                    'http://rpclick.com/q3uDN'
                   end
-    RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D257 Safari/9537.53'
+    RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
     ack!
   end
 

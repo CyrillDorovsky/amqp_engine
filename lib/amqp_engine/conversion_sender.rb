@@ -23,13 +23,13 @@ class ConversionSender
     end
     begin
     id = case msg
-    when 'mongo_offer_set_show'
-      mongo_client[ 'mongo_event_atomics' ].where( event_name: 'offer_set', dealer_id: 1 ).first['_id'].to_s
-    when 'pg_offer_set_show'
-      OfferSetShow.not_converted.where( dealer_id: 1 ).first.mongo_id.to_s
-    when 'pg_direct_offer'
-      DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
-    end
+      when 'mongo_offer_set_show'
+        mongo_client[ 'mongo_event_atomics' ].where( event_name: 'offer_set', dealer_id: 1 ).first['_id'].to_s
+      when 'pg_offer_set_show'
+        OfferSetShow.not_converted.where( dealer_id: 1 ).first.mongo_id.to_s
+      when 'pg_direct_offer'
+        DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
+      end
     rescue => e
       puts e
     end

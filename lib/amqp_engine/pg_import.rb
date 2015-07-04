@@ -4,6 +4,7 @@ require 'new_relic/agent/method_tracer'
 
 class PgImport
   include Sneakers::Worker
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include ::NewRelic::Agent::MethodTracer
 
   from_queue 'regular_tasks',
@@ -67,5 +68,6 @@ class PgImport
     Object.const_get( "DirectOffer#{ @congruence_word }" )
   end
 
+  add_transaction_tracer :work, 'Custom/pg_import', :category => :task
   add_method_tracer :work, 'Custom/pg_import'
 end

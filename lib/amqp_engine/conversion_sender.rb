@@ -4,6 +4,7 @@ require 'new_relic/agent/method_tracer'
 
 class ConversionSender
   include Sneakers::Worker
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include ::NewRelic::Agent::MethodTracer
   from_queue 'conversion_sender'
 
@@ -37,6 +38,7 @@ class ConversionSender
     ack!
   end
 
+  add_transaction_tracer :work, 'Custom/conversion_sender', :category => :task
   add_method_tracer :work, 'Custom/conversion_sender'
 
 end

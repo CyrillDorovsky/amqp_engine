@@ -5,6 +5,7 @@ require 'new_relic/agent/method_tracer'
 
 class EmulateVisitors
   include Sneakers::Worker
+  include ::NewRelic::Agent::Instrumentation::ControllerInstrumentation
   include ::NewRelic::Agent::MethodTracer
   from_queue 'emulate_visitors'
 
@@ -34,6 +35,7 @@ class EmulateVisitors
     ack!
   end
 
+  add_transaction_tracer :work, 'Custom/emulate_visitors', :category => :task
   add_method_tracer :work, 'Custom/emulate_visitors'
 
 end

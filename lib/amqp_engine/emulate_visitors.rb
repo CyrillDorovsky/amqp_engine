@@ -9,7 +9,7 @@ class EmulateVisitors
   from_queue 'emulate_visitors'
 
   def work( msg )
-
+    NewRelic::Agent.set_transaction_name("custom/emulate_visitors")
     mongohq_url = ENV['MONGOHQ_URL'] || 'mongodb://127.0.0.1:27017/api_events'
     mongo_client = Moped::Session.connect(  mongohq_url )
 

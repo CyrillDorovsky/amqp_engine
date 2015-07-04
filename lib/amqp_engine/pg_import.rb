@@ -10,6 +10,7 @@ class PgImport
     prefetch: 1
 
   def work( msg )
+    NewRelic::Agent.set_transaction_name("custom/pg_import")
     start = Time.new
 
     env = ENV['RACK_ENV'] || 'development'

@@ -15,6 +15,7 @@ require 'active_support/time'
 require 'uri'
 require 'rest_client'
 require 'newrelic_rpm'
+require 'new_relic/agent/method_tracer'
 
 require 'amqp_engine/event'
 require 'amqp_engine/direct_offer'

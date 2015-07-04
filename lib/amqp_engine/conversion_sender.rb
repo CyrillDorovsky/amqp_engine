@@ -38,7 +38,7 @@ class ConversionSender
     ack!
   end
 
-  add_transaction_tracer :work, 'Custom/conversion_sender', :category => :task
+  add_transaction_tracer :work, :category => :task
   add_method_tracer :work, 'Custom/conversion_sender'
 
 end

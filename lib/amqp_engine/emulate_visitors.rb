@@ -35,7 +35,7 @@ class EmulateVisitors
     ack!
   end
 
-  add_transaction_tracer :work, 'Custom/emulate_visitors', :category => :task
+  add_transaction_tracer :work, :category => :task
   add_method_tracer :work, 'Custom/emulate_visitors'
 
 end

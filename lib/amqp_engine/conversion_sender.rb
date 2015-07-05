@@ -30,12 +30,12 @@ class ConversionSender
         when 'pg_direct_offer'
           DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
         end
-      conversion_url = "http://api.richpays.com/apps_advert/mobvistadirect?placement=#{ id }"
-      RestClient.get conversion_url if id
-      ack!
     rescue => e
       puts e
     end
+    conversion_url = "http://api.richpays.com/apps_advert/mobvistadirect?placement=#{ id }"
+    RestClient.get conversion_url if id
+    ack!
   end
 
   add_transaction_tracer :work, :category => :task

@@ -16,7 +16,7 @@ class ConversionSender
     env = ENV['RACK_ENV'] || 'development'
 
     if env == 'production'
-      ActiveRecord::Base.establish_connection( ENV[ 'DATABASE_URL' ] )
+      ActiveRecord::Base.establish_connection("#{ENV[ 'DATABASE_URL' ]}?pool=#{ENV[ 'CONNECTION_POOL' ]}" )
     else
       configuration = YAML::load(IO.read('config/database.yml'))
       ActiveRecord::Base.establish_connection( configuration[ env ] )

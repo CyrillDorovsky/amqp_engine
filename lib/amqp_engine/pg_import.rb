@@ -39,7 +39,7 @@ class PgImport
         params[ :klass ].import items
       rescue => e
         p "PG IMPORT ERROR"
-        p e
+        p e[171..206]
       end
  
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],

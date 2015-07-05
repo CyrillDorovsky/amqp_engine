@@ -17,7 +17,7 @@ class PgImport
     env = ENV['RACK_ENV'] || 'development'
 
     if env == 'production'
-      ActiveRecord::Base.establish_connection( "#{ENV[ 'DATABASE_URL' ]}?pool=#{ENV[ 'CONNECTION_POOL' ]}" )
+      ActiveRecord::Base.establish_connection( ENV['DATABASE_URL'] )
     else
       configuration = YAML::load(IO.read('config/database.yml'))
       ActiveRecord::Base.establish_connection( configuration[ env ] )
@@ -38,8 +38,7 @@ class PgImport
       begin
         params[ :klass ].import items
       rescue => e
-        p "PG IMPORT ERROR"
-        p e[171..206]
+        p e
       end
  
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],

@@ -8,7 +8,8 @@ class PgImport
   include ::NewRelic::Agent::MethodTracer
 
   from_queue 'regular_tasks',
-    prefetch: 1
+    prefetch: 1,
+    threads: 1
 
   def work( msg )
     NewRelic::Agent.set_transaction_name("custom/pg_import")
@@ -35,11 +36,7 @@ class PgImport
         clean_params.delete( '_id' )
         params[ :klass ].new clean_params
       end
-      begin
-        params[ :klass ].import items
-      rescue =>e
-        p e
-      end
+      params[ :klass ].import items
  
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],
                                                                  [ { '$group' => {'_id' => '$from', 'summa' => { '$sum' => 1 } } } ] ])

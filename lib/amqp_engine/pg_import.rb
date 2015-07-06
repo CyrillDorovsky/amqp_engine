@@ -35,7 +35,11 @@ class PgImport
         clean_params.delete( '_id' )
         params[ :klass ].new clean_params
       end
-      params[ :klass ].import items
+      begin
+        params[ :klass ].import items
+      rescue =>e
+        p e
+      end
  
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],
                                                                  [ { '$group' => {'_id' => '$from', 'summa' => { '$sum' => 1 } } } ] ])

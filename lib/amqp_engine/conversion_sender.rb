@@ -30,7 +30,11 @@ class ConversionSender
            DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
          end
     RestClient::Request.execute( :method => :get, :url => conversion_url, :timeout => 10 )
-    RestClient.get conversion_url
+    begin
+      RestClient.get conversion_url
+    rescue =>e
+      p e
+    end
     ack!
   end
 

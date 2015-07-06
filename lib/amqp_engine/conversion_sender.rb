@@ -29,9 +29,7 @@ class ConversionSender
          when 'pg_direct_offer'
            DirectOfferRedirect.not_converted.where( dealer_id: 1 ).first.request_id
          end
-    p 'CONVERSION SEND TO'
-    conversion_url = "http://api.richpays.com/apps_advert/mobvistadirect?aff_sub=#{ id }"
-    p conversion_url
+    RestClient::Request.execute( :method => :get, :url => conversion_url, :timeout => 10 )
     RestClient.get conversion_url
     ack!
   end

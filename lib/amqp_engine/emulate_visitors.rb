@@ -31,11 +31,7 @@ class EmulateVisitors
                   when 'direct_offer_visitor'
                     'http://rpclick.com/q3uDN'
                   end
-    begin
-      RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
-    rescue => e
-      p e
-    end
+    RestClient.get visitor_url, user_agent: 'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
     ack!
   end
 

@@ -59,7 +59,6 @@ class PgImport
     case msg
     when 'import_direct_offers'
       { 
-        'direct_offer_show':     { klass: DirectOfferShow },
         'direct_offer_redirect': { klass: DirectOfferRedirect }
       }
     end

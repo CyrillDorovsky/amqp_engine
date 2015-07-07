@@ -33,7 +33,8 @@ class PgImport
 
       items = events.map do |json_params| 
         clean_params = json_params
-        clean_params.delete( '_id', 'imported' )
+        clean_params.delete( '_id' )
+        clean_params.delete( 'imported' )
         params[ :klass ].new clean_params
       end
       params[ :klass ].import items

@@ -17,7 +17,7 @@ class PgImport
 
     env = ENV['RACK_ENV'] || 'development'
 
-    if env == 'production'
+    if env == 'production' or env == 'staging'
       ActiveRecord::Base.establish_connection( "#{ENV[ 'DATABASE_URL' ]}?pool=#{ENV[ 'CONNECTION_POOL' ]}" )
     else
       configuration = YAML::load(IO.read('config/database.yml'))

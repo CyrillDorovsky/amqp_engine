@@ -55,7 +55,8 @@ class Event
         "uniq_visitor"    => @message['params']['uniq'], 
         "converted"       => false, 
         "triggered_at"    => Time.new.to_i,
-        "from"            => @message['from']
+        "from"            => @message['from'],
+        "imported"        => false
       }
     elsif @congruence_word == 'direct_offer_redirect'
       { 
@@ -81,7 +82,8 @@ class Event
         "redirect_url"    => @message['redirect_url'],
         "converted"       => false, 
         "triggered_at"    => Time.new.to_i,
-        "from"            => @message['from']
+        "from"            => @message['from'],
+        "imported"        => false
       }
     end
   end

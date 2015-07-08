@@ -29,17 +29,21 @@ class PgImport
 
     collections = collections_for( msg )
     collections.each do | collection, params |
-      events = mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i } )
+      events = mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i }, imported: false )
 
       items = events.map do |json_params| 
         clean_params = json_params
         clean_params.delete( '_id' )
+        clean_params.delete( 'imported' )
         params[ :klass ].new clean_params
       end
       params[ :klass ].import items
- 
+      mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i }, imported: false ).update_all( '$set' => { imported: true } )
+
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],
                                                                  [ { '$group' => {'_id' => '$from', 'summa' => { '$sum' => 1 } } } ] ])
+
+
       for_dealer_stats.each do | event |
         params = RedirectCode.decode( event[ '_id' ] )
         amount = event['summa']

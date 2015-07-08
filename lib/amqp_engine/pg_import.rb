@@ -44,6 +44,7 @@ class PgImport
         params = RedirectCode.decode( event[ '_id' ] )
         amount = event['summa']
         DealerStat.trigger( collection, dealer: params[ :dealer_id ], offer: params[ :offer_id ], amount: amount )
+        publish( "update_dealer_id_#{ params[ :dealer_id ] }", :to_queue => 'cash_update')
       end
       mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i } ).remove_all
     end

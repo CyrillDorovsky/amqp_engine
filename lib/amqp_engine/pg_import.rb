@@ -37,7 +37,11 @@ class PgImport
         clean_params.delete( 'imported' )
         params[ :klass ].new clean_params
       end
-      params[ :klass ].import items
+      begin
+        params[ :klass ].import items
+      rescue
+        NewRelic::Agent.set_transaction_name('pg_import/duplicated_id')
+      end
       mongo_client[ collection ].find( triggered_at: { "$lt" => start.to_i }, imported: false ).update_all( '$set' => { imported: true } )
 
       for_dealer_stats = mongo_client[ collection ].aggregate( [ [ { '$match' => { triggered_at: { "$lt" => start.to_i } } }],

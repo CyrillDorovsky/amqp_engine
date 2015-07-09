@@ -105,9 +105,9 @@ class DealerStat < ActiveRecord::Base
 
   def self.increments_for( fact, context = {} )
     case fact
-    when :direct_offer_show
-      { uniq_visitor: context[ :amount ] }
     when :direct_offer_redirect
+      { uniq_visitor: context[ :amount ] }
+    when :direct_offer_show
       { uniq_js_visitor: context[ :amount ] }
     when :visitor
       { visitor: context[ :amount ] ? context[ :amount ] : 1 }
